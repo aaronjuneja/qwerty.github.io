@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Offline 3D Dice Roll</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+        font-family: Arial;
+        color: white;
+    }
+
+    .scene {
+        width: 200px;
+        height: 200px;
+        perspective: 800px;
+    }
+
+    .cube {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 1.2s cubic-bezier(.25,.8,.25,1);
+    }
+
+    .face {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: white;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 70px;
+        font-weight: bold;
+        color: black;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    /* Positioning all 6 faces */
+    .front  { transform: rotateY(  0deg) translateZ(100px); }
+    .back   { transform: rotateY(180deg) translateZ(100px); }
+    .right  { transform: rotateY( 90deg) translateZ(100px); }
+    .left   { transform: rotateY(-90deg) translateZ(100px); }
+    .top    { transform: rotateX( 90deg) translateZ(100px); }
+    .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background: white;
+        color: #203a43;
+    }
+
+    #container {
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div id="container">
+    <div class="scene">
+        <div id="cube" class="cube">
+            <div class="face front">1</div>
+            <div class="face back">6</div>
+            <div class="face right">3</div>
+            <div class="face left">4</div>
+            <div class="face top">5</div>
+            <div class="face bottom">2</div>
+        </div>
+    </div>
+
+    <button onclick="rollDice()">Roll Dice</button>
+    <p>Result: <span id="result">-</span></p>
+</div>
+
+<script>
+function rollDice() {
+    const cube = document.getElementById("cube");
+
+    // Random final side
+    const final = Math.ceil(Math.random() * 6);
+
+    // Random tumbling animation
+    const xRand = Math.floor(Math.random() * 4) * 360;
+    const yRand = Math.floor(Math.random() * 4) * 360;
+
+    let x = 0, y = 0;
+
+    switch(final) {
+        case 1: x = 0;    y = 0;    break;
+        case 2: x = -90;  y = 0;    break;
+        case 3: x = 0;    y = -90;  break;
+        case 4: x = 0;    y = 90;   break;
+        case 5: x = 90;   y = 0;    break;
+        case 6: x = 180;  y = 0;    break;
+    }
+
+    cube.style.transform = 
+        `rotateX(${xRand + x}deg) rotateY(${yRand + y}deg)`;
+
+    document.getElementById("result").textContent = final;
+}
+</script>
+
+</body>
+</html>
